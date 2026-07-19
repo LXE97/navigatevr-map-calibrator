@@ -400,6 +400,87 @@ function createPointInput(
     return label;
 }
 
+function createCoordinateInputPair(
+    firstInput: HTMLLabelElement,
+    secondInput: HTMLLabelElement,
+    className = "",
+): HTMLDivElement {
+    const coordinateInputs = document.createElement("div");
+
+    coordinateInputs.className = [
+        "coordinate-inputs",
+        className,
+    ].filter(Boolean).join(" ");
+    coordinateInputs.append(firstInput, secondInput);
+    return coordinateInputs;
+}
+
+function createTextureCoordinateInputs(
+    point: PointData,
+    pointIndex: number,
+): HTMLDivElement {
+    const createTextureInput = (
+        label: string,
+        value: number,
+        updatePoint: (value: number) => void,
+    ): HTMLLabelElement => {
+        const inputLabel = createPointInput(
+            label,
+            Math.round(value).toString(),
+            (input) => {
+                const inputValue = numberFromInput(input);
+                if (inputValue !== null) {
+                    updatePoint(Math.round(inputValue));
+                    renderPointMarkers();
+                }
+            },
+        );
+        const input = inputLabel.querySelector("input")!;
+
+        input.step = "1";
+        input.addEventListener("change", () => {
+            const inputValue = numberFromInput(input);
+            if (inputValue !== null) {
+                input.value = Math.round(inputValue).toString();
+            }
+        });
+        return inputLabel;
+    };
+    const coordinateInputs = createCoordinateInputPair(
+        createTextureInput(
+            "Texture X",
+            point.textureX,
+            (value) => { point.textureX = value; },
+        ),
+        createTextureInput(
+            "Texture Y",
+            point.textureY,
+            (value) => { point.textureY = value; },
+        ),
+        "texture-coordinate-inputs",
+    );
+
+    coordinateInputs.dataset.pointIndex = pointIndex.toString();
+    return coordinateInputs;
+}
+
+function updateTextureCoordinateInputs(pointIndex: number): void {
+    const coordinateInputs = pointsList!.querySelector<HTMLElement>(
+        `.texture-coordinate-inputs[data-point-index="${pointIndex}"]`,
+    );
+    const inputs = coordinateInputs?.querySelectorAll<HTMLInputElement>(
+        "input",
+    );
+    const point = points[pointIndex];
+
+    if (!inputs || inputs.length !== 2 || !point) {
+        return;
+    }
+
+    inputs[0].value = Math.round(point.textureX).toString();
+    inputs[1].value = Math.round(point.textureY).toString();
+}
+
 function renderTestPoints(): void {
     testPointsList!.replaceChildren();
 
@@ -430,21 +511,23 @@ function renderTestPoints(): void {
         pointEditor.append(
             title,
             deleteButton,
-            createPointInput(
-                "World X",
-                point.worldX?.toString() ?? "",
-                (input) => {
-                    point.worldX = numberFromInput(input);
-                    renderPointMarkers();
-                },
-            ),
-            createPointInput(
-                "World Y",
-                point.worldY?.toString() ?? "",
-                (input) => {
-                    point.worldY = numberFromInput(input);
-                    renderPointMarkers();
-                },
+            createCoordinateInputPair(
+                createPointInput(
+                    "World X",
+                    point.worldX?.toString() ?? "",
+                    (input) => {
+                        point.worldX = numberFromInput(input);
+                        renderPointMarkers();
+                    },
+                ),
+                createPointInput(
+                    "World Y",
+                    point.worldY?.toString() ?? "",
+                    (input) => {
+                        point.worldY = numberFromInput(input);
+                        renderPointMarkers();
+                    },
+                ),
             ),
         );
         testPointsList!.append(pointEditor);
@@ -515,17 +598,20 @@ function renderPoints(): void {
             title,
             checkLabel,
             deleteButton,
-            createPointInput(
-                "World X",
-                point.worldX?.toString() ?? "",
-                (input) => { point.worldX = numberFromInput(input); },
-                true,
-            ),
-            createPointInput(
-                "World Y",
-                point.worldY?.toString() ?? "",
-                (input) => { point.worldY = numberFromInput(input); },
-                true,
+            createTextureCoordinateInputs(point, index),
+            createCoordinateInputPair(
+                createPointInput(
+                    "World X",
+                    point.worldX?.toString() ?? "",
+                    (input) => { point.worldX = numberFromInput(input); },
+                    true,
+                ),
+                createPointInput(
+                    "World Y",
+                    point.worldY?.toString() ?? "",
+                    (input) => { point.worldY = numberFromInput(input); },
+                    true,
+                ),
             ),
         );
         pointsList!.append(pointEditor);
@@ -589,16 +675,16 @@ function textureCoordinatesAt(
 ): { x: number; y: number } {
     const canvasBounds = textureCanvas!.getBoundingClientRect();
     return {
-        x: Math.max(0, Math.min(
+        x: Math.round(Math.max(0, Math.min(
             textureCanvas!.width - 1,
             (clientX - canvasBounds.left) *
             textureCanvas!.width / canvasBounds.width,
-        )),
-        y: Math.max(0, Math.min(
+        ))),
+        y: Math.round(Math.max(0, Math.min(
             textureCanvas!.height - 1,
             (clientY - canvasBounds.top) *
             textureCanvas!.height / canvasBounds.height,
-        )),
+        ))),
     };
 }
 
@@ -720,6 +806,7 @@ viewport.addEventListener("pointermove", (event) => {
             textureCoordinatesAt(event.clientX, event.clientY);
         points[draggedPointIndex].textureX = textureCoordinates.x;
         points[draggedPointIndex].textureY = textureCoordinates.y;
+        updateTextureCoordinateInputs(draggedPointIndex);
         renderPointMarkers();
         return;
     }
