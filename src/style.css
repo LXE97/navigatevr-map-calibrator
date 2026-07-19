@@ -16,26 +16,82 @@ body {
 	color: #eeeeee;
 }
 
+ul,
+ol {
+  display: block;
+  list-style-type: disc;
+  margin-block-start: 1em;
+  margin-block-end: 1em;
+  padding-inline-start: 10px;
+}
+
 .application {
 	display: grid;
-	grid-template-columns: minmax(0, 1fr) 300px;
+	grid-template-columns: 300px minmax(0, 1fr) 375px;
 	width: 100%;
 	height: 100%;
 }
 
+.json-sidebar {
+	display: flex;
+	min-width: 0;
+	flex-direction: column;
+	gap: 12px;
+	overflow: auto;
+	padding: 10px;
+	border-right: 1px solid #555555;
+	background: #202020;
+}
+
+.json-sidebar h2 {
+	margin: 0;
+	font-size: 16px;
+}
+
+#download-json {
+	padding: 9px 12px;
+	border: 1px solid #777777;
+	border-radius: 4px;
+	background: #3a3a3a;
+	color: #ffffff;
+	font-weight: bold;
+}
+
+#download-json:hover {
+	background: #484848;
+}
+
+#download-json:focus-visible {
+	outline: 2px solid #eeeeee;
+	outline-offset: 2px;
+}
+
+#json-output {
+	flex: 1;
+	margin: 0;
+	overflow: auto;
+	font-family: Consolas, "Courier New", monospace;
+	font-size: 11px;
+	line-height: 1.5;
+	white-space: pre-wrap;
+	overflow-wrap: anywhere;
+}
+
 .viewport {
-	display: grid;
-	place-items: center;
+	position: relative;
 	min-width: 0;
 	overflow: hidden;
 	background: #292929;
+	touch-action: none;
+	user-select: none;
 }
 
 .sidebar {
 	display: flex;
 	flex-direction: column;
 	gap: 16px;
-	padding: 20px;
+	overflow-y: auto;
+	padding: 15px;
 	border-left: 1px solid #555555;
 	background: #202020;
 }
@@ -43,6 +99,15 @@ body {
 .sidebar h1 {
 	margin: 0 0 8px;
 	font-size: 20px;
+}
+
+.sidebar h2 {
+	margin: 0;
+	font-size: 16px;
+}
+
+.instructions-section ul {
+	margin-top: 0;
 }
 
 .sidebar label {
@@ -59,4 +124,209 @@ body {
 	border-radius: 4px;
 	background: #303030;
 	color: #ffffff;
+}
+
+.metadata-section {
+	display: flex;
+	min-width: 0;
+	flex-direction: column;
+	gap: 10px;
+	margin: 0;
+	padding: 12px;
+	border: 1px solid #555555;
+	border-radius: 4px;
+}
+
+.metadata-section legend {
+	padding: 0 6px;
+	font-size: 14px;
+	font-weight: bold;
+}
+
+.sidebar .left-hand-map {
+	flex-direction: row;
+	align-items: center;
+}
+
+.sidebar .left-hand-map input {
+	width: auto;
+}
+
+#calibrate-button {
+	width: 100%;
+	padding: 9px 12px;
+	border: 1px solid #777777;
+	border-radius: 4px;
+	background: #3a3a3a;
+	color: #ffffff;
+	font-weight: bold;
+}
+
+#calibrate-button:hover {
+	background: #484848;
+}
+
+#calibrate-button:focus-visible {
+	outline: 2px solid #eeeeee;
+	outline-offset: 2px;
+}
+
+.testpoint-section {
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+}
+
+.section-heading {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 12px;
+}
+
+#add-test-point {
+	padding: 7px 10px;
+	border: 1px solid #777777;
+	border-radius: 4px;
+	background: #3a3a3a;
+	color: #ffffff;
+}
+
+#add-test-point:hover {
+	background: #484848;
+}
+
+#add-test-point:focus-visible {
+	outline: 2px solid #eeeeee;
+	outline-offset: 2px;
+}
+
+#test-points-list {
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+}
+
+.test-point-editor legend {
+	max-width: calc(100% - 34px);
+}
+
+.points-section {
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+	min-height: 0;
+}
+
+#points-empty {
+	margin: 0;
+	color: #aaaaaa;
+	font-size: 13px;
+}
+
+#points-list {
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+}
+
+.point-editor {
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+	margin: 0;
+	padding: 12px;
+	border: 1px solid #555555;
+	border-radius: 4px;
+}
+
+.point-editor legend {
+	max-width: calc(100% - 70px);
+	padding: 0 6px;
+	overflow: hidden;
+	font-size: 14px;
+	font-weight: bold;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.sidebar .point-check {
+	position: absolute;
+	top: 13px;
+	right: 46px;
+	display: block;
+}
+
+.sidebar .point-check input {
+	width: 18px;
+	height: 18px;
+	margin: 0;
+	padding: 0;
+	accent-color: #d43b3b;
+}
+
+.delete-point {
+	position: absolute;
+	top: 8px;
+	right: 8px;
+	display: grid;
+	width: 28px;
+	height: 28px;
+	padding: 5px;
+	border: 1px solid #666666;
+	border-radius: 4px;
+	background: #303030;
+	color: #eeeeee;
+}
+
+.delete-point:hover {
+	border-color: #cc5555;
+	background: #4a2929;
+	color: #ff7777;
+}
+
+.delete-point:focus-visible {
+	outline: 2px solid #eeeeee;
+	outline-offset: 2px;
+}
+
+.delete-point svg {
+	width: 100%;
+	height: 100%;
+	fill: currentColor;
+}
+
+#points-overlay {
+	position: absolute;
+	inset: 0;
+	overflow: hidden;
+	pointer-events: none;
+}
+
+.point-marker {
+	position: absolute;
+	width: 7px;
+	height: 7px;
+	border: 2px solid #ff0000;
+	background: transparent;
+	transform: translate(-50%, -50%);
+}
+
+.point-marker.is-checked {
+	border-color: #ffdd00;
+}
+
+.point-marker.is-test {
+	border-color: #00ff00;
+}
+
+#texture-canvas {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	display: block;
+	transform: translate(-50%, -50%);
+	transform-origin: center;
+	will-change: transform;
 }
