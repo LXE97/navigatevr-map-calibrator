@@ -13,6 +13,12 @@ app.innerHTML = `
 			<h2>JSON Output</h2>
 			<button id="download-json" type="button">Download JSON</button>
 			<pre id="json-output">{}</pre>
+			source: <a
+				class="source-repository"
+				href="https://github.com/LXE97/navigatevr-map-calibrator"
+				target="_blank"
+				rel="noopener noreferrer"
+			>LXE97/navigatevr-map-calibrator</a>
 		</aside>
 
 		<section class="viewport">

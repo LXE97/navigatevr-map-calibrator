@@ -77,6 +77,22 @@ ol {
 	overflow-wrap: anywhere;
 }
 
+.source-repository {
+	color: #b8d7ff;
+	font-size: 12px;
+	overflow-wrap: anywhere;
+}
+
+.source-repository:hover {
+	color: #ffffff;
+}
+
+.source-repository:focus-visible {
+	border-radius: 2px;
+	outline: 2px solid #eeeeee;
+	outline-offset: 2px;
+}
+
 .viewport {
 	position: relative;
 	min-width: 0;
