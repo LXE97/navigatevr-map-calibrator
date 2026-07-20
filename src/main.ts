@@ -869,9 +869,6 @@ textureInput.addEventListener("change", async () => {
         context.clearRect(0, 0, bitmap.width, bitmap.height);
         context.drawImage(bitmap, 0, 0);
         bitmap.close();
-        points.length = 0;
-        checkedPoints.clear();
-        renderPoints();
         hasTexture = true;
         resetView();
 
@@ -893,9 +890,6 @@ textureInput.addEventListener("change", async () => {
                 context.createImageData(decoded.width, decoded.height);
             imageData.data.set(decoded.pixels);
             context.putImageData(imageData, 0, 0);
-            points.length = 0;
-            checkedPoints.clear();
-            renderPoints();
             hasTexture = true;
             resetView();
         } catch (error) {
